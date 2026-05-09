@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JIG — Build & Construction London</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0e0d0b;
+    --off-white: #f2ede6;
+    --warm-white: #faf7f2;
+    --gold: #c9a84c;
+    --gold-light: #e8c96e;
+    --concrete: #8a8278;
+    --mid: #3a3630;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--off-white);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, opacity 0.2s; opacity: 0.6; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; background: linear-gradient(to bottom, rgba(14,13,11,0.97), transparent); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; }
+  .nav-logo span { color: var(--off-white); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { color: var(--off-white); text-decoration: none; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; opacity: 0.75; transition: opacity 0.2s, color 0.2s; }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+  .nav-cta { background: var(--gold); color: var(--black) !important; padding: 10px 22px; border-radius: 2px; opacity: 1 !important; font-weight: 500; }
+  .nav-cta:hover { background: var(--gold-light) !important; }
+
+  /* HERO */
+  .hero { height: 100vh; position: relative; display: flex; align-items: flex-end; padding: 0 48px 80px; overflow: hidden; }
+  .hero-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=80'); background-size: cover; background-position: center; }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(14,13,11,0.9) 0%, rgba(14,13,11,0.45) 55%, rgba(14,13,11,0.85) 100%); }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.05) 1px, transparent 1px); background-size: 80px 80px; animation: gridFade 3s ease forwards; }
+  @keyframes gridFade { from { opacity: 0; } to { opacity: 1; } }
+
+  .beam { position: absolute; background: linear-gradient(180deg, transparent, rgba(201,168,76,0.15), transparent); width: 1px; }
+  .beam-1 { left: 20%; height: 60%; top: 0; animation: beamDrop 1.5s 0.3s ease forwards; opacity: 0; }
+  .beam-2 { left: 50%; height: 80%; top: 0; animation: beamDrop 1.5s 0.5s ease forwards; opacity: 0; }
+  .beam-3 { right: 20%; height: 50%; top: 0; animation: beamDrop 1.5s 0.7s ease forwards; opacity: 0; }
+  @keyframes beamDrop { from { opacity: 0; transform: scaleY(0); transform-origin: top; } to { opacity: 1; transform: scaleY(1); } }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+  .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 14px; animation: fadeUp 0.8s 0.4s ease both; }
+  .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 13vw, 12rem); line-height: 0.88; letter-spacing: 0.04em; animation: fadeUp 0.8s 0.6s ease both; }
+  .hero-title .gold { color: var(--gold); }
+  .hero-sub { font-size: 1.05rem; font-weight: 300; color: rgba(242,237,230,0.7); max-width: 480px; line-height: 1.7; margin-top: 24px; animation: fadeUp 0.8s 0.8s ease both; }
+  .hero-actions { display: flex; gap: 16px; align-items: center; margin-top: 40px; animation: fadeUp 0.8s 1s ease both; }
+  .btn-primary { background: var(--gold); color: var(--black); padding: 16px 36px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; border: none; border-radius: 2px; cursor: none; text-decoration: none; display: inline-block; transition: background 0.2s, transform 0.2s; }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline { border: 1px solid rgba(242,237,230,0.35); color: var(--off-white); padding: 16px 36px; font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; border-radius: 2px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .stats-bar { position: absolute; bottom: 0; right: 0; background: rgba(14,13,11,0.8); border-top: 1px solid rgba(201,168,76,0.2); border-left: 1px solid rgba(201,168,76,0.2); display: flex; animation: fadeUp 0.8s 1.2s ease both; backdrop-filter: blur(8px); }
+  .stat { padding: 20px 36px; border-right: 1px solid rgba(201,168,76,0.1); text-align: center; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--gold); letter-spacing: 0.05em; display: block; }
+  .stat-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--concrete); display: block; margin-top: 2px; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* MARQUEE */
+  .marquee-section { background: var(--gold); padding: 14px 0; overflow: hidden; }
+  .marquee-track { display: flex; animation: marquee 22s linear infinite; white-space: nowrap; }
+  .marquee-item { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; color: var(--black); padding: 0 32px; display: flex; align-items: center; gap: 32px; }
+  .marquee-item::after { content: '◆'; font-size: 0.5rem; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* PHOTO STRIP */
+  .photo-strip { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3px; height: 420px; background: var(--black); }
+  .strip-photo { position: relative; overflow: hidden; background: var(--mid); }
+  .strip-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; display: block; }
+  .strip-photo:hover img { transform: scale(1.05); }
+  .strip-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px; background: linear-gradient(to top, rgba(14,13,11,0.9), transparent); font-size: 0.67rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); opacity: 0; transition: opacity 0.3s; }
+  .strip-photo:hover .strip-label { opacity: 1; }
+
+  /* SERVICES */
+  .services { padding: 120px 48px; background: var(--warm-white); color: var(--black); }
+  .section-label { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .section-label::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 6vw, 5.5rem); line-height: 0.9; letter-spacing: 0.03em; color: var(--black); margin-bottom: 64px; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+
+  .service-card { background: var(--black); color: var(--off-white); position: relative; overflow: hidden; transition: transform 0.3s; cursor: none; }
+  .service-card-photo { width: 100%; height: 190px; overflow: hidden; }
+  .service-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+  .service-card:hover .service-card-photo img { transform: scale(1.06); }
+  .service-card-body { padding: 28px 26px 34px; }
+  .service-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .service-card:hover::before { opacity: 1; }
+  .service-card:hover { transform: translateY(-4px); }
+
+  .service-card.large { grid-column: span 2; background: var(--gold); color: var(--black); display: grid; grid-template-columns: 1fr 1fr; }
+  .service-card.large .service-card-photo { height: 100%; min-height: 280px; }
+  .service-card.large::before { background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%); }
+  .service-card.large .service-card-body { padding: 36px 30px; }
+
+  .service-icon { font-size: 1.7rem; margin-bottom: 12px; display: block; }
+  .service-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: rgba(201,168,76,0.1); position: absolute; bottom: 10px; right: 16px; line-height: 1; pointer-events: none; }
+  .service-card.large .service-num { color: rgba(0,0,0,0.07); }
+  .service-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .service-desc { font-size: 0.82rem; line-height: 1.7; opacity: 0.7; }
+  .service-card.large .service-desc { opacity: 0.78; }
+  .service-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+  .tag { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 10px; border: 1px solid rgba(0,0,0,0.2); border-radius: 1px; }
+
+  /* GALLERY */
+  .gallery { padding: 100px 48px; background: var(--black); }
+  .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 240px 240px; gap: 3px; margin-top: 56px; }
+  .gallery-item { position: relative; overflow: hidden; background: var(--mid); cursor: none; }
+  .gallery-item.tall { grid-row: span 2; }
+  .gallery-item.wide { grid-column: span 2; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
+  .gallery-item:hover img { transform: scale(1.07); }
+  .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,13,11,0.78) 0%, transparent 55%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 18px; }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-caption { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+
+  /* WHY US */
+  .why { padding: 120px 48px; background: var(--black); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .why-visual { position: relative; height: 520px; }
+  .why-photo-main { position: absolute; top: 0; left: 0; width: 65%; height: 72%; overflow: hidden; }
+  .why-photo-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .why-photo-accent { position: absolute; bottom: 0; right: 0; width: 48%; height: 56%; overflow: hidden; border: 3px solid var(--black); }
+  .why-photo-accent img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .why-badge { position: absolute; bottom: 20px; left: 20px; background: var(--black); border: 1px solid rgba(201,168,76,0.25); padding: 18px 24px; z-index: 2; }
+  .why-badge-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.2rem; color: var(--gold); line-height: 1; display: block; }
+  .why-badge-text { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--concrete); display: block; margin-top: 4px; }
+  .why-cross { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 32px; height: 32px; z-index: 3; }
+  .why-cross::before, .why-cross::after { content: ''; position: absolute; background: var(--gold); }
+  .why-cross::before { width: 100%; height: 1px; top: 50%; }
+  .why-cross::after { width: 1px; height: 100%; left: 50%; }
+
+  .features { list-style: none; margin-top: 36px; }
+  .feature { display: flex; align-items: flex-start; gap: 20px; padding: 18px 0; border-bottom: 1px solid rgba(201,168,76,0.08); }
+  .feature:first-child { border-top: 1px solid rgba(201,168,76,0.08); }
+  .feature-icon { width: 40px; height: 40px; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .feature-title { font-weight: 500; margin-bottom: 4px; font-size: 0.93rem; }
+  .feature-desc { font-size: 0.81rem; color: var(--concrete); line-height: 1.6; }
+
+  /* PROCESS */
+  .process { padding: 120px 48px; background: var(--mid); }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 64px; }
+  .step { background: rgba(14,13,11,0.6); padding: 40px 28px; position: relative; border-top: 3px solid transparent; transition: border-color 0.3s; }
+  .step:hover { border-color: var(--gold); }
+  .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: rgba(201,168,76,0.12); line-height: 1; display: block; margin-bottom: 14px; }
+  .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.45rem; letter-spacing: 0.06em; color: var(--gold); margin-bottom: 10px; }
+  .step-desc { font-size: 0.82rem; color: var(--concrete); line-height: 1.7; }
+  .step-arrow { position: absolute; right: -13px; top: 50%; transform: translateY(-50%); background: var(--gold); color: var(--black); width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; z-index: 2; }
+  .step:last-child .step-arrow { display: none; }
+
+  /* COMMERCIAL */
+  .commercial { padding: 120px 48px; background: var(--black); }
+  .commercial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 64px; }
+  .com-card { position: relative; overflow: hidden; height: 300px; background: var(--mid); display: flex; align-items: flex-end; padding: 28px; cursor: none; transition: filter 0.3s; }
+  .com-card:hover { filter: brightness(1.12); }
+  .com-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .com-card:hover img { transform: scale(1.05); }
+  .com-card-bg { position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,13,11,0.88) 0%, rgba(14,13,11,0.15) 65%); z-index: 1; }
+  .com-content { position: relative; z-index: 2; }
+  .com-icon { font-size: 1.3rem; display: block; margin-bottom: 6px; }
+  .com-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; letter-spacing: 0.06em; display: flex; align-items: center; gap: 12px; }
+  .com-title::before { content: ''; width: 24px; height: 2px; background: var(--gold); flex-shrink: 0; }
+
+  /* TESTIMONIALS */
+  .testimonials { padding: 120px 48px; background: var(--warm-white); color: var(--black); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+  .testimonial { background: white; padding: 36px; border-bottom: 3px solid var(--gold); }
+  .testimonial-quote { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: var(--gold); line-height: 0.6; margin-bottom: 18px; display: block; }
+  .testimonial-text { font-size: 0.87rem; line-height: 1.8; color: #444; font-style: italic; margin-bottom: 22px; }
+  .testimonial-author { font-weight: 500; font-size: 0.85rem; }
+  .testimonial-role { font-size: 0.71rem; color: var(--concrete); letter-spacing: 0.1em; text-transform: uppercase; }
+  .stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 14px; }
+
+  /* CONTACT */
+  .contact { padding: 120px 48px; background: var(--black); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .contact-info-item { display: flex; gap: 20px; padding: 22px 0; border-bottom: 1px solid rgba(201,168,76,0.08); }
+  .contact-info-icon { width: 44px; height: 44px; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .contact-info-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--concrete); }
+  .contact-info-value { font-size: 0.93rem; margin-top: 4px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--concrete); margin-bottom: 8px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.15); padding: 13px 15px; color: var(--off-white); font-family: 'DM Sans', sans-serif; font-size: 0.87rem; border-radius: 2px; outline: none; transition: border-color 0.2s; cursor: none; }
+  .form-group select { appearance: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
+  .form-group textarea { min-height: 110px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* FOOTER */
+  footer { background: var(--black); border-top: 1px solid rgba(201,168,76,0.1); padding: 36px 48px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.1em; color: var(--gold); }
+  .footer-logo span { color: rgba(242,237,230,0.35); }
+  .footer-copy { font-size: 0.73rem; color: var(--concrete); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 0.7rem; color: var(--concrete); text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* HAMBURGER MENU */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 200;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 26px;
+    height: 2px;
+    background: var(--off-white);
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(14,13,11,0.98);
+    z-index: 150;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    color: var(--off-white);
+    text-decoration: none;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    width: 70%;
+    text-align: center;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:last-child { border-bottom: none; color: var(--gold); margin-top: 16px; font-size: 2rem; background: var(--gold); color: var(--black); padding: 16px 40px; width: auto; }
+  .mobile-menu a:hover { color: var(--gold); }
+
+  /* TABLET */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 28px; }
+    .nav-links { gap: 20px; }
+    .nav-links li:not(:last-child) { display: none; }
+
+    .hero { padding: 0 28px 100px; }
+    .stats-bar { position: relative; width: 100%; justify-content: stretch; border-left: none; }
+    .stat { flex: 1; padding: 16px 12px; }
+
+    .photo-strip { grid-template-columns: 1fr 1fr; height: 300px; }
+    .photo-strip .strip-photo:last-child { display: none; }
+
+    .services { padding: 80px 28px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .service-card.large { grid-column: span 2; grid-template-columns: 1fr 1fr; }
+
+    .gallery { padding: 80px 28px; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 220px); }
+    .gallery-item.tall { grid-row: span 1; }
+    .gallery-item.wide { grid-column: span 2; }
+
+    .why { padding: 80px 28px; gap: 48px; }
+    .why-visual { height: 360px; }
+
+    .process { padding: 80px 28px; }
+    .process-steps { grid-template-columns: repeat(2, 1fr); }
+    .step-arrow { display: none; }
+
+    .commercial { padding: 80px 28px; }
+
+    .testimonials { padding: 80px 28px; }
+    .testimonials-grid { grid-template-columns: 1fr 1fr; }
+    .testimonials-grid .testimonial:last-child { display: none; }
+
+    .contact { padding: 80px 28px; gap: 48px; }
+
+    footer { padding: 28px 28px; flex-wrap: wrap; gap: 16px; }
+    .footer-copy { order: 3; width: 100%; text-align: center; }
+  }
+
+  /* MOBILE */
+  @media (max-width: 767px) {
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+
+    nav { padding: 18px 20px; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+
+    .hero { height: 100svh; padding: 0 20px 0; align-items: center; }
+    .hero-content { padding-top: 80px; }
+    .hero-title { font-size: clamp(4rem, 18vw, 6rem); }
+    .hero-sub { font-size: 0.95rem; max-width: 100%; }
+    .hero-actions { flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 28px; }
+    .btn-primary, .btn-outline { padding: 14px 28px; font-size: 0.75rem; width: 100%; text-align: center; }
+    .stats-bar {
+      position: relative;
+      width: 100%;
+      border-left: none;
+      border-top: 1px solid rgba(201,168,76,0.2);
+      margin-top: 32px;
+      backdrop-filter: blur(8px);
+    }
+    .stat { flex: 1; padding: 14px 8px; }
+    .stat-num { font-size: 1.7rem; }
+    .stat-label { font-size: 0.55rem; }
+
+    .photo-strip { grid-template-columns: 1fr; height: 260px; }
+    .photo-strip .strip-photo:nth-child(2),
+    .photo-strip .strip-photo:nth-child(3) { display: none; }
+    .strip-label { opacity: 1; }
+
+    .services { padding: 64px 20px; }
+    .section-title { margin-bottom: 40px; }
+    .services-grid { grid-template-columns: 1fr; gap: 3px; }
+    .service-card.large { grid-column: span 1; grid-template-columns: 1fr; }
+    .service-card.large .service-card-photo { height: 220px; min-height: unset; }
+    .service-card-photo { height: 180px; }
+
+    .gallery { padding: 64px 20px; }
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, 160px);
+    }
+    .gallery-item.tall { grid-row: span 1; }
+    .gallery-item.wide { grid-column: span 2; }
+    .gallery-overlay { opacity: 1; }
+
+    .why { grid-template-columns: 1fr; padding: 64px 20px; gap: 0; }
+    .why-visual { height: 280px; margin-bottom: 48px; }
+    .why-photo-main { width: 70%; height: 75%; }
+    .why-photo-accent { width: 50%; height: 55%; }
+    .why-badge { padding: 12px 16px; }
+    .why-badge-num { font-size: 2.4rem; }
+
+    .process { padding: 64px 20px; }
+    .process-steps { grid-template-columns: 1fr; gap: 3px; }
+    .step-arrow { display: none; }
+    .step-num { font-size: 3.5rem; margin-bottom: 8px; }
+
+    .commercial { padding: 64px 20px; }
+    .commercial-grid { grid-template-columns: 1fr; }
+    .com-card { height: 220px; }
+
+    .testimonials { padding: 64px 20px; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .testimonials-grid .testimonial:last-child { display: block; }
+
+    .contact { grid-template-columns: 1fr; padding: 64px 20px; gap: 48px; }
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+    .form-group input, .form-group select, .form-group textarea { font-size: 16px; cursor: auto; }
+
+    footer { flex-direction: column; align-items: center; text-align: center; padding: 28px 20px; gap: 14px; }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE MENU OVERLAY -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="closeMobileMenu()">Services</a>
+  <a href="#gallery" onclick="closeMobileMenu()">Projects</a>
+  <a href="#commercial" onclick="closeMobileMenu()">Commercial</a>
+  <a href="#process" onclick="closeMobileMenu()">Process</a>
+  <a href="#contact" onclick="closeMobileMenu()">Get a Quote</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">JIG<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Projects</a></li>
+    <li><a href="#commercial">Commercial</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-photo"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grid"></div>
+  <div class="beam beam-1"></div>
+  <div class="beam beam-2"></div>
+  <div class="beam beam-3"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">London's Premier Construction Partner</div>
+    <h1 class="hero-title">WE<br><span class="gold">BUILD</span><br>LONDON</h1>
+    <p class="hero-sub">Residential renovations to commercial fit-outs. JIG delivers precision craftsmanship across every project — on time, on budget, built to last.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Start Your Project</a>
+      <a href="#services" class="btn-outline">View Services</a>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num">15+</span><span class="stat-label">Years in London</span></div>
+    <div class="stat"><span class="stat-num">600+</span><span class="stat-label">Projects Done</span></div>
+    <div class="stat"><span class="stat-num">98%</span><span class="stat-label">Client Satisfaction</span></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item">Residential Renovation</div>
+    <div class="marquee-item">Loft Conversions</div>
+    <div class="marquee-item">Extensions</div>
+    <div class="marquee-item">Garage Build</div>
+    <div class="marquee-item">Garden Buildings</div>
+    <div class="marquee-item">Fencing &amp; Decking</div>
+    <div class="marquee-item">Restaurant Fit-Out</div>
+    <div class="marquee-item">Commercial Spaces</div>
+    <div class="marquee-item">Exterior Works</div>
+    <div class="marquee-item">Residential Renovation</div>
+    <div class="marquee-item">Loft Conversions</div>
+    <div class="marquee-item">Extensions</div>
+    <div class="marquee-item">Garage Build</div>
+    <div class="marquee-item">Garden Buildings</div>
+    <div class="marquee-item">Fencing &amp; Decking</div>
+    <div class="marquee-item">Restaurant Fit-Out</div>
+    <div class="marquee-item">Commercial Spaces</div>
+    <div class="marquee-item">Exterior Works</div>
+  </div>
+</div>
+
+<!-- PHOTO STRIP -->
+<div class="photo-strip">
+  <div class="strip-photo">
+    <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1200&q=80" alt="House Extension" loading="lazy">
+    <div class="strip-label">House Extension — London</div>
+  </div>
+  <div class="strip-photo">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80" alt="Garden Decking" loading="lazy">
+    <div class="strip-label">Garden &amp; Decking</div>
+  </div>
+  <div class="strip-photo">
+    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80" alt="Loft Interior" loading="lazy">
+    <div class="strip-label">Loft Conversion</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">RESIDENTIAL<br>SERVICES</h2>
+  <div class="services-grid reveal">
+
+    <div class="service-card large">
+      <div class="service-card-photo">
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=900&q=80" alt="Home Renovation" loading="lazy">
+      </div>
+      <div class="service-card-body">
+        <span class="service-icon">🏠</span>
+        <div class="service-title">Home Renovation &amp; Extensions</div>
+        <p class="service-desc">Full-scale home transformations — from single rooms to whole-house renovations and extensions. We handle planning permission, structural work, and finishing to the highest standard.</p>
+        <div class="service-tags">
+          <span class="tag">Loft Conversions</span>
+          <span class="tag">Extensions</span>
+          <span class="tag">Full Renovation</span>
+          <span class="tag">Basement Conversion</span>
+        </div>
+        <span class="service-num">01</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-card-photo">
+        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=700&q=80" alt="Exterior" loading="lazy">
+      </div>
+      <div class="service-card-body">
+        <span class="service-icon">🧱</span>
+        <div class="service-title">Exterior &amp; Facade</div>
+        <p class="service-desc">Render, cladding, brickwork, roofing, and all exterior improvements to enhance your home's kerb appeal and weatherproofing.</p>
+        <span class="service-num">02</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-card-photo">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=700&q=80" alt="Garden" loading="lazy">
+      </div>
+      <div class="service-card-body">
+        <span class="service-icon">🌿</span>
+        <div class="service-title">Garden &amp; Outdoor</div>
+        <p class="service-desc">Fencing, decking, patios, garden offices, summer houses, and landscaping. Your outdoor space, reimagined.</p>
+        <div class="service-tags">
+          <span class="tag">Fencing</span>
+          <span class="tag">Decking</span>
+          <span class="tag">Garden Rooms</span>
+        </div>
+        <span class="service-num">03</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-card-photo">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=700&q=80" alt="Kitchen" loading="lazy">
+      </div>
+      <div class="service-card-body">
+        <span class="service-icon">🛁</span>
+        <div class="service-title">Kitchen &amp; Bathroom</div>
+        <p class="service-desc">Full kitchen and bathroom refits with plumbing, tiling, electrics, and fit-out by our specialist teams.</p>
+        <span class="service-num">04</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-card-photo">
+        <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=700&q=80" alt="Loft" loading="lazy">
+      </div>
+      <div class="service-card-body">
+        <span class="service-icon">🏗</span>
+        <div class="service-title">Loft Conversions</div>
+        <p class="service-desc">Transform your loft into a stunning bedroom, office, or living space. Full structural work, insulation, and finish included.</p>
+        <span class="service-num">05</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="section-label">Our Work</div>
+  <h2 class="section-title" style="color:var(--off-white);">RECENT<br>PROJECTS</h2>
+  <div class="gallery-grid reveal">
+    <div class="gallery-item tall">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Luxury Home" loading="lazy">
+      <div class="gallery-overlay"><span class="gallery-caption">Luxury Home — Kensington</span></div>
+    </div>
+    <div class="gallery-item wide">
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80" alt="Full Renovation" loading="lazy">
+      <div class="gallery-overlay"><span class="gallery-caption">Full Renovation — Hampstead</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=600&q=80" alt="Loft Interior" loading="lazy">
+      <div class="gallery-overlay"><span class="gallery-caption">Loft Bedroom — Islington</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1503174971373-b1f69850bded?auto=format&fit=crop&w=600&q=80" alt="Brick House" loading="lazy">
+      <div class="gallery-overlay"><span class="gallery-caption">New Build — South London</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="Garden Decking" loading="lazy">
+      <div class="gallery-overlay"><span class="gallery-caption">Decking &amp; Garden — Richmond</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=80" alt="Kitchen" loading="lazy">
+      <div class="gallery-overlay"><span class="gallery-caption">Kitchen Refit — Clapham</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why">
+  <div class="why-visual reveal">
+    <div class="why-photo-main">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80" alt="Quality build" loading="lazy">
+    </div>
+    <div class="why-photo-accent">
+      <img src="https://images.unsplash.com/photo-1503174971373-b1f69850bded?auto=format&fit=crop&w=700&q=80" alt="Construction detail" loading="lazy">
+    </div>
+    <div class="why-badge">
+      <span class="why-badge-num">15+</span>
+      <span class="why-badge-text">Years of London Projects</span>
+    </div>
+    <div class="why-cross"></div>
+  </div>
+  <div class="reveal">
+    <div class="section-label">Why JIG</div>
+    <h2 class="section-title" style="color: var(--off-white);">BUILT ON<br>TRUST</h2>
+    <p style="color: var(--concrete); font-size: 0.88rem; line-height: 1.8; max-width: 420px;">Every project we take on is treated with the same care and precision — whether it's a garden fence or a full restaurant fit-out. London homes and businesses deserve better.</p>
+    <ul class="features">
+      <li class="feature">
+        <div class="feature-icon">✓</div>
+        <div><div class="feature-title">Fully Licensed &amp; Insured</div><div class="feature-desc">All work meets UK building regulations. Fully insured with £5m public liability coverage.</div></div>
+      </li>
+      <li class="feature">
+        <div class="feature-icon">⏱</div>
+        <div><div class="feature-title">On-Time Delivery</div><div class="feature-desc">We set realistic timelines and stick to them. 94% of projects delivered on or ahead of schedule.</div></div>
+      </li>
+      <li class="feature">
+        <div class="feature-icon">💷</div>
+        <div><div class="feature-title">Fixed-Price Quoting</div><div class="feature-desc">Transparent, detailed quotes upfront. No surprise costs, no hidden extras.</div></div>
+      </li>
+      <li class="feature">
+        <div class="feature-icon">🛡</div>
+        <div><div class="feature-title">10-Year Workmanship Guarantee</div><div class="feature-desc">We stand behind every nail, every brick, every coat of paint — long after we've left.</div></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-label" style="color: var(--gold);">How It Works</div>
+  <h2 class="section-title" style="color: var(--off-white);">OUR<br>PROCESS</h2>
+  <div class="process-steps reveal">
+    <div class="step">
+      <span class="step-num">01</span>
+      <div class="step-title">Free Consultation</div>
+      <p class="step-desc">We meet on-site to discuss your vision, assess the scope, and understand your timeline and budget.</p>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <div class="step-title">Detailed Quote</div>
+      <p class="step-desc">You receive a clear, itemised fixed-price quote within 48 hours. No vague estimates.</p>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <div class="step-title">Build &amp; Update</div>
+      <p class="step-desc">Our team gets to work. You receive regular progress updates and have a direct line to your project manager.</p>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <div class="step-title">Handover &amp; Guarantee</div>
+      <p class="step-desc">We walkthrough the finished project with you and hand over a full workmanship guarantee.</p>
+      <div class="step-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMERCIAL -->
+<section class="commercial" id="commercial">
+  <div class="section-label">Commercial</div>
+  <h2 class="section-title">COMMERCIAL<br>SPACES</h2>
+  <p style="color: var(--concrete); font-size: 0.88rem; line-height: 1.8; max-width: 540px; margin-top: -40px; margin-bottom: 0;">From restaurant fit-outs to retail stores and office refurbishments, JIG handles the full build process for London's businesses.</p>
+  <div class="commercial-grid reveal">
+    <div class="com-card">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80" alt="Restaurant" loading="lazy">
+      <div class="com-card-bg"></div>
+      <div class="com-content"><span class="com-icon">🍽</span><div class="com-title">Restaurants &amp; Cafés</div></div>
+    </div>
+    <div class="com-card">
+      <img src="https://images.unsplash.com/photo-1555529669-2269763671c0?auto=format&fit=crop&w=900&q=80" alt="Retail Store" loading="lazy">
+      <div class="com-card-bg"></div>
+      <div class="com-content"><span class="com-icon">🛍</span><div class="com-title">Retail Stores</div></div>
+    </div>
+    <div class="com-card">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80" alt="Office" loading="lazy">
+      <div class="com-card-bg"></div>
+      <div class="com-content"><span class="com-icon">🏢</span><div class="com-title">Office Fit-Outs</div></div>
+    </div>
+    <div class="com-card">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80" alt="New Build" loading="lazy">
+      <div class="com-card-bg"></div>
+      <div class="com-content"><span class="com-icon">🏗</span><div class="com-title">New Builds</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-label">Client Stories</div>
+  <h2 class="section-title">WHAT LONDON<br>SAYS</h2>
+  <div class="testimonials-grid reveal">
+    <div class="testimonial">
+      <span class="testimonial-quote">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">JIG transformed our Victorian terrace in Clapham. The attention to detail was remarkable — they respected the original features while delivering a thoroughly modern interior. On time, on budget.</p>
+      <div class="testimonial-author">Sarah &amp; Tom M.</div>
+      <div class="testimonial-role">Clapham, SW4 — Full Renovation</div>
+    </div>
+    <div class="testimonial">
+      <span class="testimonial-quote">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">We needed a restaurant fit-out with a tight launch deadline. JIG delivered a stunning space in 6 weeks. Professional, communicative, and genuinely talented craftsmen.</p>
+      <div class="testimonial-author">Marco D.</div>
+      <div class="testimonial-role">Shoreditch, E1 — Restaurant Fit-Out</div>
+    </div>
+    <div class="testimonial">
+      <span class="testimonial-quote">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">The garden room and decking JIG built for us has completely changed how we use our home. Brilliant work from the whole team. Our neighbours keep asking for their number!</p>
+      <div class="testimonial-author">James K.</div>
+      <div class="testimonial-role">Richmond, TW9 — Garden Room &amp; Decking</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="section-label">Contact Us</div>
+    <h2 class="section-title">START YOUR<br>PROJECT</h2>
+    <p style="color: var(--concrete); font-size: 0.88rem; line-height: 1.8; max-width: 380px; margin-bottom: 40px;">Ready to build? Get in touch for a free, no-obligation consultation and quote.</p>
+    <div class="contact-info-item">
+      <div class="contact-info-icon">📞</div>
+      <div><div class="contact-info-label">Phone</div><div class="contact-info-value">020 7946 0123</div></div>
+    </div>
+    <div class="contact-info-item">
+      <div class="contact-info-icon">✉</div>
+      <div><div class="contact-info-label">Email</div><div class="contact-info-value">hello@jigconstruction.co.uk</div></div>
+    </div>
+    <div class="contact-info-item">
+      <div class="contact-info-icon">📍</div>
+      <div><div class="contact-info-label">Based In</div><div class="contact-info-value">London, United Kingdom</div></div>
+    </div>
+    <div class="contact-info-item">
+      <div class="contact-info-icon">🕐</div>
+      <div><div class="contact-info-label">Hours</div><div class="contact-info-value">Mon–Fri 8am–6pm, Sat 9am–2pm</div></div>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="form-row">
+      <div class="form-group"><label>First Name</label><input type="text" placeholder="John"></div>
+      <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+    </div>
+    <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@example.com"></div>
+    <div class="form-group"><label>Phone</label><input type="tel" placeholder="07700 000000"></div>
+    <div class="form-group">
+      <label>Service Required</label>
+      <select>
+        <option value="">Select a service...</option>
+        <option>Home Renovation</option>
+        <option>Extension / Loft Conversion</option>
+        <option>Kitchen or Bathroom</option>
+        <option>Exterior Works</option>
+        <option>Garage Build</option>
+        <option>Garden / Decking / Fencing</option>
+        <option>Garden Room / Office</option>
+        <option>Commercial Fit-Out</option>
+        <option>New Build</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Tell Us About Your Project</label><textarea placeholder="Brief description of your project, location, and estimated timeline..."></textarea></div>
+    <button class="btn-primary" style="width:100%;text-align:center;" onclick="this.textContent='Message Sent ✓';this.style.background='#5a8a5a';">Request Free Quote</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">JIG<span>.</span></div>
+  <div class="footer-copy">© 2024 JIG Construction Ltd. All rights reserved. Registered in England &amp; Wales.</div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Instagram</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  /* Custom cursor (desktop only) */
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  if (window.matchMedia('(pointer: fine)').matches) {
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    });
+    function animRing() {
+      rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+    document.querySelectorAll('a, button, input, select, textarea').forEach(el => {
+      el.addEventListener('mouseenter', () => { ring.style.width='52px'; ring.style.height='52px'; ring.style.opacity='1'; });
+      el.addEventListener('mouseleave', () => { ring.style.width='36px'; ring.style.height='36px'; ring.style.opacity='0.6'; });
+    });
+  }
+
+  /* Hamburger menu */
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const btn = document.getElementById('hamburger');
+    menu.classList.toggle('open');
+    btn.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  }
+  function closeMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const btn = document.getElementById('hamburger');
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* Scroll reveal */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = '0.1s';
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
