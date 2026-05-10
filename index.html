@@ -31,7 +31,8 @@
   .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, opacity 0.2s; opacity: 0.6; }
 
   /* NAV */
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; background: linear-gradient(to bottom, rgba(14,13,11,0.97), transparent); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; background: linear-gradient(to bottom, rgba(14,13,11,0.97), transparent); transition: transform 0.35s ease; }
+  nav.hide { transform: translateY(-100%); }
   .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; }
   .nav-logo span { color: var(--off-white); }
   .nav-links { display: flex; gap: 36px; list-style: none; }
@@ -786,6 +787,17 @@
 </footer>
 
 <script>
+  /* Hide nav on scroll down */
+  (function() {
+    const nav = document.querySelector('nav');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('hide', y > lastY && y > 80);
+      lastY = y;
+    }, { passive: true });
+  })();
+
   /* Custom cursor (desktop only) */
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
