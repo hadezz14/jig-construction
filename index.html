@@ -787,15 +787,24 @@
 </footer>
 
 <script>
-  /* Hide nav on scroll down */
+  /* Hide nav on scroll, reveal only on hover near top */
   (function() {
     const nav = document.querySelector('nav');
-    let lastY = 0;
+    let scrolled = false;
+
     window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      nav.classList.toggle('hide', y > lastY && y > 80);
-      lastY = y;
+      scrolled = window.scrollY > 80;
+      if (scrolled) nav.classList.add('hide');
     }, { passive: true });
+
+    document.addEventListener('mousemove', e => {
+      if (!scrolled) return;
+      if (e.clientY < 72) {
+        nav.classList.remove('hide');
+      } else {
+        nav.classList.add('hide');
+      }
+    });
   })();
 
   /* Custom cursor (desktop only) */
